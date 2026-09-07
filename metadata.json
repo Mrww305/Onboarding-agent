@@ -1,0 +1,6 @@
+{
+  "name": "MegniToo Video Onboarding Agent",
+  "description": "Interactive AI video onboarding agent for megnitoo.com with live avatar presenter, feature walkthroughs, GPU sandbox, and personalized curriculum guidance.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
