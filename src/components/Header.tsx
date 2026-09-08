@@ -20,7 +20,6 @@ interface HeaderProps {
   onOpenVercelModal: () => void;
   deviceMode: DeviceMode;
   onChangeDeviceMode: (mode: DeviceMode) => void;
-  onNavigateLanding?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -39,7 +38,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenVercelModal,
   deviceMode,
   onChangeDeviceMode,
-  onNavigateLanding,
 }) => {
   const completedCount = progress.completedSteps.length;
   const progressPercent = Math.round((completedCount / totalSteps) * 100);
@@ -154,18 +152,6 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
           </div>
-
-          {/* Return to Landing Page / Overview */}
-          {onNavigateLanding && (
-            <button
-              onClick={onNavigateLanding}
-              id="header-overview-btn"
-              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-2.5 py-1.5 text-[10px] font-mono text-white/70 hover:text-white transition-all shadow-sm shrink-0"
-              title="Return to Incubator Landing Page"
-            >
-              <span>Landing Page</span>
-            </button>
-          )}
 
           {/* Discord Squads Community Link */}
           <a

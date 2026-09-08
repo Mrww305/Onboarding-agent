@@ -9,7 +9,6 @@ import {
   ORGANIZATION_ROLES,
   getRoleAdjustedStep,
   getRoleById,
-  SQUADS_DISCORD_COMMUNITY_URL,
 } from "./data/onboardingData";
 import { AvatarGuide, UserOnboardingProgress, OrgRoleId } from "./types";
 import { Header } from "./components/Header";
@@ -31,7 +30,6 @@ import { FlutterSnackbar } from "./components/FlutterSnackbar";
 import { DeviceMode } from "./components/FlutterDeviceSelector";
 import { VercelDeployModal } from "./components/VercelDeployModal";
 import { LiveTelemetryDebugHUD } from "./components/LiveTelemetryDebugHUD";
-import { LandingPage } from "./components/LandingPage";
 import {
   Sparkles,
   CheckCircle2,
@@ -50,12 +48,6 @@ import {
 } from "lucide-react";
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<"landing" | "app">(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#app") {
-      return "app";
-    }
-    return "landing";
-  });
   const [activeGuide, setActiveGuide] = useState<AvatarGuide>(AVATAR_GUIDES[0]);
   const [currentStepId, setCurrentStepId] = useState<number>(1);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -222,35 +214,6 @@ export default function App() {
 
   const allCompleted = progress.completedSteps.length >= WALKTHROUGH_STEPS.length;
 
-  if (viewMode === "landing") {
-    return (
-      <>
-        <LandingPage
-          activeGuide={activeGuide}
-          onSelectGuide={setActiveGuide}
-          onLaunchApp={(stepId, roleId) => {
-            if (stepId) setCurrentStepId(stepId);
-            if (roleId) {
-              handleSelectRole(roleId);
-              handleConfirmRole(roleId);
-            }
-            setViewMode("app");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          onOpenDiscord={() => window.open(SQUADS_DISCORD_COMMUNITY_URL, "_blank")}
-        />
-
-        {/* Global Flutter Snackbar */}
-        {toastMessage && (
-          <FlutterSnackbar
-            message={toastMessage}
-            onDismiss={() => setToastMessage(null)}
-          />
-        )}
-      </>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#050505] font-sans text-[#e5e5e5] selection:bg-emerald-500/20 selection:text-emerald-300">
       {/* Top Header */}
@@ -272,10 +235,6 @@ export default function App() {
         onChangeDeviceMode={(mode) => {
           setDeviceMode(mode);
           showToast(`Flutter UI layout: ${mode.toUpperCase()}`);
-        }}
-        onNavigateLanding={() => {
-          setViewMode("landing");
-          window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       />
 
