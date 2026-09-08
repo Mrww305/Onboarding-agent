@@ -57,6 +57,32 @@ app.get("/api/health", (_req, res) => {
     status: "ok",
     hasApiKey: Boolean(process.env.GEMINI_API_KEY),
     service: "megnitoo-onboarding-agent",
+    timestamp: Date.now(),
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
+});
+
+// Live Telemetry & Latency Diagnostic Endpoint
+app.get("/api/telemetry/latency", (req, res) => {
+  const startHr = process.hrtime();
+  const mem = process.memoryUsage();
+  const [sec, nano] = process.hrtime(startHr);
+  const serverProcessingTimeMs = (sec * 1000 + nano / 1e6).toFixed(3);
+
+  res.json({
+    status: "live",
+    serverTimestamp: Date.now(),
+    serverProcessingMs: parseFloat(serverProcessingTimeMs),
+    uptimeSeconds: Math.floor(process.uptime()),
+    nodeVersion: process.version,
+    memory: {
+      rssMb: Math.round((mem.rss / 1024 / 1024) * 100) / 100,
+      heapUsedMb: Math.round((mem.heapUsed / 1024 / 1024) * 100) / 100,
+      heapTotalMb: Math.round((mem.heapTotal / 1024 / 1024) * 100) / 100,
+    },
+    cloudRegion: process.env.K_REVISION ? "cloud-run-asia-southeast1" : "edge-local",
+    geminiModel: "gemini-3.8-flash",
+    hasGeminiKey: Boolean(process.env.GEMINI_API_KEY),
   });
 });
 

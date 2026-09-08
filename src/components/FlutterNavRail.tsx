@@ -8,8 +8,11 @@ import {
   HelpCircle,
   Sliders,
   Tv,
+  MessageSquare,
+  ExternalLink,
 } from "lucide-react";
 import { WalkthroughStep, OrgRole, AvatarGuide } from "../types";
+import { SQUADS_DISCORD_COMMUNITY_URL } from "../data/onboardingData";
 
 interface FlutterNavRailProps {
   steps: WalkthroughStep[];
@@ -107,8 +110,30 @@ export const FlutterNavRail: React.FC<FlutterNavRailProps> = ({
         })}
       </div>
 
-      {/* Bottom: Vercel Deploy, Guide Chat & Scholar Pass */}
-      <div className="flex flex-col items-center gap-3">
+      {/* Bottom: Discord Squads, Vercel Deploy, Scholar Pass & Guide Chat */}
+      <div className="flex flex-col items-center gap-2.5 pb-2">
+        {/* Discord Community Button */}
+        <a
+          href={SQUADS_DISCORD_COMMUNITY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center justify-center rounded-2xl p-2 bg-[#5865F2]/10 hover:bg-[#5865F2]/25 border border-[#5865F2]/30 text-[#8ea1ff] transition-all w-14 group"
+          title="Join MegniToo Squads Discord: discord.gg/tgpSywuXP"
+        >
+          <MessageSquare className="h-4 w-4 text-[#5865F2] group-hover:scale-110 transition-transform" />
+          <span className="text-[7px] font-mono font-bold mt-1 text-[#8ea1ff]">Discord</span>
+        </a>
+
+        {/* Scholar Pass Modal Button */}
+        <button
+          onClick={onOpenCertificate}
+          className="flex flex-col items-center justify-center rounded-2xl p-2 bg-white/5 hover:bg-white/10 border border-white/10 text-emerald-400 transition-all w-14"
+          title="View Scholar Pass"
+        >
+          <Award className="h-4 w-4" />
+          <span className="text-[7px] font-mono font-bold mt-1 text-white/70">Pass</span>
+        </button>
+
         {/* Vercel Deploy Button */}
         <button
           onClick={onOpenVercelModal}
@@ -119,7 +144,7 @@ export const FlutterNavRail: React.FC<FlutterNavRailProps> = ({
           <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 2L24 22H0L12 2Z" />
           </svg>
-          <span className="text-[8px] font-mono font-bold mt-1 text-emerald-300">Vercel</span>
+          <span className="text-[7px] font-mono font-bold mt-1 text-emerald-300">Vercel</span>
         </button>
 
         {/* AI Guide Avatar Button */}

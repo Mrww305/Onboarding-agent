@@ -820,6 +820,40 @@ export const INCUBATION_TRACKS: IncubationTrack[] = [
     technologies: ["LangGraph", "CrewAI", "Pydantic", "FastAPI", "Redis", "DuckDuckGo API"],
     careerRoles: ["AI Agent Specialist", "Automation Solutions Architect", "AI Systems Lead"],
   },
+  {
+    id: "edge-ai",
+    title: "Edge AI & Hardware Neural Acceleration",
+    level: "Intermediate",
+    durationWeeks: 10,
+    badgeColor: "from-rose-500 to-pink-600",
+    iconName: "Cpu",
+    summary: "Quantize and deploy high-throughput lightweight models on mobile, Apple Silicon Metal, TensorRT, ONNX Runtime, and WebGPU.",
+    syllabus: [
+      { week: "Week 1-2", topic: "Model Compression: Post-Training Quantization (INT8/INT4)", deliverable: "Quantized Gemma 2 2B with zero accuracy degradation" },
+      { week: "Week 3-5", topic: "ONNX Runtime & TensorRT Execution Providers", deliverable: "Sub-15ms Real-Time Vision Pipeline" },
+      { week: "Week 6-8", topic: "WebGPU & In-Browser Neural Networks (Transformers.js)", deliverable: "Zero-Server Client-Side LLM Chat Demo" },
+      { week: "Week 9-10", topic: "Embedded Hardware Edge Deployment (Raspberry Pi & Jetson)", deliverable: "Autonomous Robot Vision System" },
+    ],
+    technologies: ["TensorRT", "ONNX Runtime", "WebGPU", "C++", "PyTorch Mobile", "OpenVINO"],
+    careerRoles: ["Edge ML Engineer", "Embedded Systems AI Lead", "Inference Optimization Specialist"],
+  },
+  {
+    id: "ai-safety-security",
+    title: "AI Security, Red-Teaming & Safety Guardrails",
+    level: "Advanced",
+    durationWeeks: 8,
+    badgeColor: "from-red-500 to-slate-800",
+    iconName: "ShieldAlert",
+    summary: "Audit enterprise LLMs for prompt injection, jailbreaking, data leakage, and implement automated NeMo/Llama-Guard security barriers.",
+    syllabus: [
+      { week: "Week 1-2", topic: "Adversarial Prompt Injections & Indirect Jailbreaks", deliverable: "Red-Teaming Benchmark Suite" },
+      { week: "Week 3-4", topic: "Output Verification & NeMo Guardrails Integration", deliverable: "Deterministic Enterprise Boundary Shield" },
+      { week: "Week 5-6", topic: "PII Scrubbing & Model Poisoning Defense", deliverable: "Zero-Knowledge Embedding Gateway" },
+      { week: "Week 7-8", topic: "SOC2 & ISO 42001 Compliance for Generative Workloads", deliverable: "Production Audit & Risk Certification Report" },
+    ],
+    technologies: ["NeMo Guardrails", "Llama-Guard", "Presidio", "LangKit", "OWASP Top 10 for LLMs"],
+    careerRoles: ["AI Security Engineer", "Red-Teaming Analyst", "Trust & Safety Specialist"],
+  },
 ];
 
 export const MENTORS: MentorProfile[] = [
@@ -853,7 +887,39 @@ export const MENTORS: MentorProfile[] = [
     rating: 4.97,
     reviewsCount: 115,
   },
+  {
+    id: "zainab",
+    name: "Zainab Raza",
+    role: "Senior Autonomous Agent Researcher",
+    company: "OpenAgents Lab",
+    specialty: "Multi-Agent Swarms & Long-Horizon Planning",
+    availableSlots: ["Friday at 4:00 PM PKT", "Saturday at 2:00 PM PKT", "Monday at 6:30 PM PKT"],
+    rating: 4.99,
+    reviewsCount: 84,
+  },
+  {
+    id: "bilal",
+    name: "Bilal K. Niazi",
+    role: "Cloud Infrastructure Director",
+    company: "DevOps Nexus Europe",
+    specialty: "Terraform IaC, Serverless Edge & Vercel Scaling",
+    availableSlots: ["Tomorrow at 1:00 PM PKT", "Wednesday at 9:00 PM PKT", "Sunday at 11:00 AM PKT"],
+    rating: 4.94,
+    reviewsCount: 106,
+  },
+  {
+    id: "sara",
+    name: "Sara Chen",
+    role: "Staff Inference Acceleration Engineer",
+    company: "NeuralMatrix Systems",
+    specialty: "CUDA Kernel Tuning & vLLM High-Throughput Serving",
+    availableSlots: ["Thursday at 10:00 AM PKT", "Friday at 7:00 PM PKT", "Saturday at 4:00 PM PKT"],
+    rating: 4.96,
+    reviewsCount: 67,
+  },
 ];
+
+export const SQUADS_DISCORD_COMMUNITY_URL = "https://discord.gg/tgpSywuXP";
 
 export const STUDY_SQUADS: StudySquad[] = [
   {
@@ -865,6 +931,7 @@ export const STUDY_SQUADS: StudySquad[] = [
     maxMembers: 25,
     meetingSchedule: "Tues & Sat @ 7:00 PM",
     isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
   },
   {
     id: "squad-karachi",
@@ -875,6 +942,7 @@ export const STUDY_SQUADS: StudySquad[] = [
     maxMembers: 25,
     meetingSchedule: "Mon & Thu @ 8:00 PM",
     isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
   },
   {
     id: "squad-isb",
@@ -885,16 +953,51 @@ export const STUDY_SQUADS: StudySquad[] = [
     maxMembers: 20,
     meetingSchedule: "Wed & Sun @ 6:00 PM",
     isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
+  },
+  {
+    id: "squad-peshawar",
+    name: "Peshawar Edge & Embedded AI Hub",
+    city: "Peshawar / Hybrid",
+    track: "Edge AI & Hardware Neural Acceleration",
+    membersCount: 14,
+    maxMembers: 20,
+    meetingSchedule: "Thu & Sat @ 5:30 PM",
+    isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
+  },
+  {
+    id: "squad-quetta",
+    name: "Quetta Open Source Agents Collective",
+    city: "Quetta / Hybrid",
+    track: "Autonomous AI Agents",
+    membersCount: 11,
+    maxMembers: 15,
+    meetingSchedule: "Fri & Sun @ 4:00 PM",
+    isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
   },
   {
     id: "squad-global",
     name: "MegniToo Global Remote Builders",
     city: "Remote Worldwide",
     track: "Autonomous AI Agents",
-    membersCount: 29,
+    membersCount: 32,
     maxMembers: 35,
     meetingSchedule: "Daily Async Standups + Fri Demo",
     isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
+  },
+  {
+    id: "squad-europe",
+    name: "London & Berlin AI SRE Brigade",
+    city: "Europe / Remote",
+    track: "DevOps & Cloud Engineering",
+    membersCount: 19,
+    maxMembers: 25,
+    meetingSchedule: "Wed & Sun @ 7:00 PM GMT",
+    isActive: true,
+    discordUrl: SQUADS_DISCORD_COMMUNITY_URL,
   },
 ];
 
@@ -904,4 +1007,71 @@ export const FREQUENT_QUESTIONS = [
   "Can I switch my track after starting?",
   "What is required to earn the MegniToo Scholar Badge?",
   "How do the 1-on-1 mentor code reviews work?",
+  "How does the Vercel CI/CD GitHub deployment pipeline work?",
+  "Can I recruit graduates or partner as a commercial sponsor?",
+  "What GPU hardware does MegniToo allocate in cloud workspaces?",
+];
+
+export interface ModelBenchmarkData {
+  modelName: string;
+  parameters: string;
+  latencyP50Ms: number;
+  latencyP95Ms: number;
+  tokensPerSec: number;
+  memoryVramGb: number;
+  quantization: string;
+  coldStartSec: number;
+}
+
+export const LIVE_BENCHMARK_TELEMETRY: ModelBenchmarkData[] = [
+  {
+    modelName: "Llama 3.1 8B Instruct",
+    parameters: "8.0B",
+    latencyP50Ms: 24,
+    latencyP95Ms: 38,
+    tokensPerSec: 94.2,
+    memoryVramGb: 6.8,
+    quantization: "AWQ 4-bit",
+    coldStartSec: 1.2,
+  },
+  {
+    modelName: "Gemma 2 9B IT",
+    parameters: "9.2B",
+    latencyP50Ms: 28,
+    latencyP95Ms: 44,
+    tokensPerSec: 88.6,
+    memoryVramGb: 7.4,
+    quantization: "GPTQ 4-bit",
+    coldStartSec: 1.4,
+  },
+  {
+    modelName: "Mistral 7B v0.3",
+    parameters: "7.2B",
+    latencyP50Ms: 19,
+    latencyP95Ms: 31,
+    tokensPerSec: 104.5,
+    memoryVramGb: 5.9,
+    quantization: "FP8",
+    coldStartSec: 0.9,
+  },
+  {
+    modelName: "DeepSeek R1 Distill Qwen 8B",
+    parameters: "8.0B",
+    latencyP50Ms: 32,
+    latencyP95Ms: 51,
+    tokensPerSec: 81.0,
+    memoryVramGb: 6.9,
+    quantization: "INT4 AWQ",
+    coldStartSec: 1.6,
+  },
+  {
+    modelName: "OpenAI Whisper Large v3",
+    parameters: "1.5B",
+    latencyP50Ms: 12,
+    latencyP95Ms: 22,
+    tokensPerSec: 180.0,
+    memoryVramGb: 3.2,
+    quantization: "FP16",
+    coldStartSec: 0.5,
+  },
 ];

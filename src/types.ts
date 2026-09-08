@@ -93,6 +93,7 @@ export interface StudySquad {
   maxMembers: number;
   meetingSchedule: string;
   isActive: boolean;
+  discordUrl?: string;
 }
 
 export interface GpuMetrics {
@@ -111,6 +112,15 @@ export interface ChatMessage {
   text: string;
   timestamp: string;
   relatedStep?: number;
+}
+
+export interface LatencyTelemetryMetric {
+  endpoint: string;
+  latencyMs: number;
+  status: number | "ok" | "slow" | "error";
+  timestamp: string;
+  region: string;
+  method: string;
 }
 
 export interface UserOnboardingProgress {

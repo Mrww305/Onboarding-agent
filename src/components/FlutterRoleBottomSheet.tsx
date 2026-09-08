@@ -1,14 +1,14 @@
 import React from "react";
 import { X, Check, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
-import { OrgRole } from "../types";
+import { OrgRole, OrgRoleId } from "../types";
 
 interface FlutterRoleBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   roles: OrgRole[];
-  selectedRoleId: string;
-  onSelectRole: (roleId: string) => void;
-  onConfirmRole: () => void;
+  selectedRoleId: OrgRoleId | string | null;
+  onSelectRole: (roleId: OrgRoleId) => void;
+  onConfirmRole?: (roleId: OrgRoleId) => void;
 }
 
 export const FlutterRoleBottomSheet: React.FC<FlutterRoleBottomSheetProps> = ({
@@ -62,7 +62,9 @@ export const FlutterRoleBottomSheet: React.FC<FlutterRoleBottomSheetProps> = ({
                 key={role.id}
                 onClick={() => {
                   onSelectRole(role.id);
-                  onConfirmRole();
+                  if (onConfirmRole) {
+                    onConfirmRole(role.id);
+                  }
                   onClose();
                 }}
                 className={`w-full flex items-center justify-between p-3.5 rounded-2xl border text-left transition-all ${

@@ -10,6 +10,7 @@ interface FlutterStepsBottomSheetProps {
   onSelectStep: (stepId: number) => void;
   completedSteps: number[];
   activeRole: OrgRole;
+  selectedRoleId?: string | null;
 }
 
 export const FlutterStepsBottomSheet: React.FC<FlutterStepsBottomSheetProps> = ({

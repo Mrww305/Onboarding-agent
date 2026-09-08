@@ -1,7 +1,8 @@
 import React from "react";
-import { Volume2, VolumeX, Sparkles, Award, ExternalLink, Rocket } from "lucide-react";
+import { Volume2, VolumeX, Sparkles, Award, ExternalLink, Rocket, MessageSquare } from "lucide-react";
 import { AvatarGuide, UserOnboardingProgress, OrgRole } from "../types";
 import { FlutterDeviceSelector, DeviceMode } from "./FlutterDeviceSelector";
+import { SQUADS_DISCORD_COMMUNITY_URL } from "../data/onboardingData";
 
 interface HeaderProps {
   guides: AvatarGuide[];
@@ -19,6 +20,7 @@ interface HeaderProps {
   onOpenVercelModal: () => void;
   deviceMode: DeviceMode;
   onChangeDeviceMode: (mode: DeviceMode) => void;
+  onNavigateLanding?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -37,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenVercelModal,
   deviceMode,
   onChangeDeviceMode,
+  onNavigateLanding,
 }) => {
   const completedCount = progress.completedSteps.length;
   const progressPercent = Math.round((completedCount / totalSteps) * 100);
@@ -151,6 +154,31 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
           </div>
+
+          {/* Return to Landing Page / Overview */}
+          {onNavigateLanding && (
+            <button
+              onClick={onNavigateLanding}
+              id="header-overview-btn"
+              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-2.5 py-1.5 text-[10px] font-mono text-white/70 hover:text-white transition-all shadow-sm shrink-0"
+              title="Return to Incubator Landing Page"
+            >
+              <span>Landing Page</span>
+            </button>
+          )}
+
+          {/* Discord Squads Community Link */}
+          <a
+            href={SQUADS_DISCORD_COMMUNITY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            id="header-discord-link"
+            className="flex items-center gap-1.5 rounded-xl border border-[#5865F2]/40 bg-[#5865F2]/15 hover:bg-[#5865F2]/25 px-2.5 py-1.5 text-[10px] font-mono text-[#8ea1ff] hover:text-white transition-all shadow-sm shrink-0"
+            title="Join MegniToo Squads Discord: discord.gg/tgpSywuXP"
+          >
+            <MessageSquare className="h-3.5 w-3.5 text-[#5865F2]" />
+            <span className="hidden xl:inline">Discord</span>
+          </a>
 
           {/* Vercel Deploy Action Button */}
           <button

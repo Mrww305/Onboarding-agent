@@ -15,17 +15,22 @@ import {
   Play,
   Sparkles,
 } from "lucide-react";
+import type { OrgRole } from "../types";
 
 interface VercelDeployModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onShowToast: (msg: string) => void;
+  onShowToast?: (msg: string) => void;
+  activeRole?: OrgRole;
+  onDeploymentTriggered?: () => void;
 }
 
 export const VercelDeployModal: React.FC<VercelDeployModalProps> = ({
   isOpen,
   onClose,
   onShowToast,
+  activeRole,
+  onDeploymentTriggered,
 }) => {
   const [activeTab, setActiveTab] = useState<"github" | "vercel" | "validator">("vercel");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -56,7 +61,7 @@ export const VercelDeployModal: React.FC<VercelDeployModalProps> = ({
   const handleCopy = (text: string, idx: number) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(idx);
-    onShowToast("Copied to clipboard!");
+    onShowToast?.("Copied to clipboard!");
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
@@ -70,7 +75,7 @@ git branch -M main
 git remote add origin https://github.com/YOUR_USER/megnitoo-onboarding-agent.git
 git push -u origin main`;
     navigator.clipboard.writeText(fullScript);
-    onShowToast("Full Git push sequence copied!");
+    onShowToast?.("Full Git push sequence copied!");
   };
 
   const runPreflightValidation = () => {
@@ -79,7 +84,8 @@ git push -u origin main`;
     setTimeout(() => {
       setIsSimulatingTest(false);
       setSimulationPassed(true);
-      onShowToast("All Vercel pre-flight checks verified!");
+      onShowToast?.("All Vercel pre-flight checks verified!");
+      onDeploymentTriggered?.();
     }, 1500);
   };
 

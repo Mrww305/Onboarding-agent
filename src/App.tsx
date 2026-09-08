@@ -9,6 +9,7 @@ import {
   ORGANIZATION_ROLES,
   getRoleAdjustedStep,
   getRoleById,
+  SQUADS_DISCORD_COMMUNITY_URL,
 } from "./data/onboardingData";
 import { AvatarGuide, UserOnboardingProgress, OrgRoleId } from "./types";
 import { Header } from "./components/Header";
@@ -23,11 +24,14 @@ import { AgentChatDrawer } from "./components/AgentChatDrawer";
 import { CompletionCertificateModal } from "./components/CompletionCertificateModal";
 import { FlutterBottomNav, MobileTab } from "./components/FlutterBottomNav";
 import { FlutterNavRail } from "./components/FlutterNavRail";
+import { FlutterStepperBottomBar } from "./components/FlutterStepperBottomBar";
 import { FlutterStepsBottomSheet } from "./components/FlutterStepsBottomSheet";
 import { FlutterRoleBottomSheet } from "./components/FlutterRoleBottomSheet";
 import { FlutterSnackbar } from "./components/FlutterSnackbar";
 import { DeviceMode } from "./components/FlutterDeviceSelector";
 import { VercelDeployModal } from "./components/VercelDeployModal";
+import { LiveTelemetryDebugHUD } from "./components/LiveTelemetryDebugHUD";
+import { LandingPage } from "./components/LandingPage";
 import {
   Sparkles,
   CheckCircle2,
@@ -46,6 +50,12 @@ import {
 } from "lucide-react";
 
 export default function App() {
+  const [viewMode, setViewMode] = useState<"landing" | "app">(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#app") {
+      return "app";
+    }
+    return "landing";
+  });
   const [activeGuide, setActiveGuide] = useState<AvatarGuide>(AVATAR_GUIDES[0]);
   const [currentStepId, setCurrentStepId] = useState<number>(1);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -178,7 +188,7 @@ export default function App() {
   const handleJoinSquad = (squadId: string) => {
     setProgress((prev) => ({ ...prev, squadJoined: true }));
     markStepComplete(6);
-    showToast("Study Squad joined! Ready for graduation.");
+    showToast("Study Squad joined! Squad Discord channel unlocked: discord.gg/tgpSywuXP");
   };
 
   const handleNextStep = () => {
@@ -212,6 +222,35 @@ export default function App() {
 
   const allCompleted = progress.completedSteps.length >= WALKTHROUGH_STEPS.length;
 
+  if (viewMode === "landing") {
+    return (
+      <>
+        <LandingPage
+          activeGuide={activeGuide}
+          onSelectGuide={setActiveGuide}
+          onLaunchApp={(stepId, roleId) => {
+            if (stepId) setCurrentStepId(stepId);
+            if (roleId) {
+              handleSelectRole(roleId);
+              handleConfirmRole(roleId);
+            }
+            setViewMode("app");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          onOpenDiscord={() => window.open(SQUADS_DISCORD_COMMUNITY_URL, "_blank")}
+        />
+
+        {/* Global Flutter Snackbar */}
+        {toastMessage && (
+          <FlutterSnackbar
+            message={toastMessage}
+            onDismiss={() => setToastMessage(null)}
+          />
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#050505] font-sans text-[#e5e5e5] selection:bg-emerald-500/20 selection:text-emerald-300">
       {/* Top Header */}
@@ -234,13 +273,17 @@ export default function App() {
           setDeviceMode(mode);
           showToast(`Flutter UI layout: ${mode.toUpperCase()}`);
         }}
+        onNavigateLanding={() => {
+          setViewMode("landing");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
       />
 
-      {/* Main Responsive Body with optional Flutter Navigation Rail for Tablets */}
+      {/* Main Responsive Body with adaptive Flutter Navigation Rail for Tablets & Desktop */}
       <div className={`flex w-full ${deviceMode === "tablet" ? "flex-row" : "flex-col md:flex-row"}`}>
-        {/* Flutter Tablet Navigation Rail */}
-        {(deviceMode === "tablet" || deviceMode === "auto") && (
-          <div className={deviceMode === "tablet" ? "block" : "hidden md:flex lg:hidden shrink-0"}>
+        {/* Flutter Navigation Rail (Docked on md+ screens for true Flutter Multiplatform feel) */}
+        {deviceMode !== "mobile" && (
+          <div className="hidden md:flex shrink-0">
             <FlutterNavRail
               steps={WALKTHROUGH_STEPS}
               currentStepId={currentStepId}
@@ -259,9 +302,9 @@ export default function App() {
         {/* Main Content Area */}
         <div className="flex-1 min-w-0">
           <main
-            className={`mx-auto px-4 py-6 sm:px-8 pb-28 md:pb-12 ${
+            className={`mx-auto px-4 py-6 sm:px-8 pb-32 md:pb-24 ${
               deviceMode === "mobile"
-                ? "max-w-md my-4 rounded-[40px] border-2 border-white/20 p-4 shadow-[0_0_50px_rgba(0,0,0,0.9)] bg-[#070707]"
+                ? "max-w-xl my-4 rounded-[32px] border border-white/20 p-4 sm:p-6 shadow-[0_0_50px_rgba(0,0,0,0.9)] bg-[#070707]"
                 : "max-w-7xl"
             }`}
           >
@@ -567,6 +610,20 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* Flutter Persistent Stepper Bottom Bar (Seamless Chapter Navigation) */}
+      <FlutterStepperBottomBar
+        currentStepId={currentStepId}
+        totalSteps={WALKTHROUGH_STEPS.length}
+        steps={WALKTHROUGH_STEPS}
+        completedSteps={progress.completedSteps}
+        onNextStep={handleNextStep}
+        onPrevStep={handlePrevStep}
+        onSelectStep={(stepId) => setCurrentStepId(stepId)}
+        onOpenCertificate={() => setIsCertModalOpen(true)}
+        onOpenAskAgent={() => setIsChatDrawerOpen(true)}
+        isCurrentStepCompleted={progress.completedSteps.includes(currentStepId)}
+      />
     </div>
   </div>
 
@@ -574,7 +631,7 @@ export default function App() {
       <button
         onClick={() => setIsChatDrawerOpen(true)}
         id="floating-ask-agent-btn"
-        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-30 flex items-center gap-3 rounded-full bg-white text-black px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] shadow-2xl hover:bg-emerald-400 transition-all hover:scale-105 active:scale-95 border border-white"
+        className="fixed bottom-24 md:bottom-20 right-4 md:right-6 z-30 flex items-center gap-3 rounded-full bg-white text-black px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] shadow-2xl hover:bg-emerald-400 transition-all hover:scale-105 active:scale-95 border border-white"
       >
         <img
           src={activeGuide.avatarUrl}
@@ -588,17 +645,21 @@ export default function App() {
       {/* Flutter Mobile Bottom Navigation Bar */}
       <div className={deviceMode === "laptop" ? "hidden" : deviceMode === "mobile" ? "block" : "md:hidden"}>
         <FlutterBottomNav
-          steps={WALKTHROUGH_STEPS}
+          currentTab={mobileTab}
+          onSelectTab={(tab) => setMobileTab(tab)}
           currentStepId={currentStepId}
           onSelectStep={(stepId) => setCurrentStepId(stepId)}
+          steps={WALKTHROUGH_STEPS}
           completedSteps={progress.completedSteps}
+          completedStepsCount={progress.completedSteps.length}
+          totalSteps={WALKTHROUGH_STEPS.length}
           activeRole={activeRoleObj}
+          activeGuide={activeGuide}
           onOpenStepsSheet={() => setIsStepsSheetOpen(true)}
           onOpenRoleSheet={() => setIsRoleSheetOpen(true)}
           onOpenVercelModal={() => setIsVercelModalOpen(true)}
           onOpenCertificate={() => setIsCertModalOpen(true)}
           onOpenAskAgent={() => setIsChatDrawerOpen(true)}
-          activeGuide={activeGuide}
         />
       </div>
 
@@ -621,6 +682,7 @@ export default function App() {
         roles={ORGANIZATION_ROLES}
         selectedRoleId={progress.selectedRoleId}
         onSelectRole={(roleId) => handleSelectRole(roleId)}
+        onConfirmRole={(roleId) => handleConfirmRole(roleId)}
       />
 
       {/* Vercel & GitHub Deployment Center Modal */}
@@ -628,6 +690,7 @@ export default function App() {
         isOpen={isVercelModalOpen}
         onClose={() => setIsVercelModalOpen(false)}
         activeRole={activeRoleObj}
+        onShowToast={showToast}
         onDeploymentTriggered={() => {
           handleCompleteDeployment();
           showToast("Vercel CI/CD Pipeline successfully synchronized!");
@@ -655,6 +718,16 @@ export default function App() {
           setProgress((prev) => ({ ...prev, scholarName: name }))
         }
         activeRole={activeRoleObj}
+      />
+
+      {/* Live Real-time Latency & Debug Telemetry HUD */}
+      <LiveTelemetryDebugHUD
+        activeRole={activeRoleObj}
+        currentStepId={currentStep.id}
+        progress={progress}
+        activeGuide={activeGuide}
+        deviceMode={deviceMode}
+        onShowToast={showToast}
       />
 
       {/* Flutter-style Snackbar Notification */}
